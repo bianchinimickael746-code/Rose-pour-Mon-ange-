@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090506">
+<title>Une rose pour toi 🌹</title>
+<style>
+:root{--cream:#fff3e8}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif;background:radial-gradient(circle at 50% 15%,#401c20 0,#160b0e 42%,#050304 100%);color:var(--cream)}
+body{overflow-x:hidden}
+button{font:inherit}
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+.card{width:min(980px,100%);min-height:calc(100vh - 44px);border:1px solid rgba(255,190,180,.25);border-radius:28px;overflow:hidden;background:rgba(18,8,10,.74);box-shadow:0 20px 80px #000;position:relative}
+.screen{display:none;min-height:calc(100vh - 44px);padding:clamp(28px,6vw,70px);position:relative}
+.screen.active{display:flex}
+#intro{align-items:center;justify-content:space-between;gap:30px}
+.introText{max-width:450px;z-index:2}
+.eyebrow{letter-spacing:4px;text-transform:uppercase;font-size:12px;color:#eeb7ad}
+h1{font-size:clamp(42px,7vw,76px);line-height:.98;font-weight:400;margin:16px 0 25px}
+p{font-size:18px;line-height:1.65;color:#ead8d3}
+.roseHero{width:min(45vw,430px);min-width:250px;aspect-ratio:1;display:grid;place-items:center;position:relative}
+.roseHero:before{content:"";position:absolute;width:75%;height:75%;border-radius:50%;background:radial-gradient(circle,rgba(255,185,185,.16),rgba(255,185,185,0) 70%);animation:pulse 4s ease-in-out infinite}
+.rose{font-size:clamp(150px,25vw,290px);filter:grayscale(.65) brightness(1.25) drop-shadow(0 0 35px rgba(255,180,180,.28));animation:float 4s ease-in-out infinite;position:relative;z-index:2}
+@keyframes float{50%{transform:translateY(-10px) scale(1.02)}}
+@keyframes pulse{50%{transform:scale(1.12);opacity:.65}}
+.cta{border:0;border-radius:999px;padding:15px 28px;background:linear-gradient(90deg,#fff0e8,#ffb6b6);color:#4b2024;cursor:pointer;box-shadow:0 0 28px rgba(255,180,180,.28);transition:.25s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(255,180,180,.45)}
+.cta:active{transform:scale(.96)}
+.hint{font-style:italic;color:#cfaeaa;margin-top:22px}
+#roseScreen{flex-direction:column;align-items:center}
+.top{width:100%;text-align:center}
+.top h2{font-weight:400;font-size:clamp(28px,5vw,46px);margin:8px 0}
+.top p{margin:0;font-size:15px}
+.game{width:min(850px,100%);display:flex;flex-direction:column;align-items:center;gap:16px;flex:1;justify-content:center}
+.roseStage{position:relative;width:min(78vw,500px);height:min(78vw,500px);max-height:500px;display:grid;place-items:center}
+.bigRose{font-size:min(60vw,360px);line-height:1;transition:filter 1.2s ease,transform 1s ease;filter:grayscale(1) sepia(.08) brightness(1.5) drop-shadow(0 0 20px rgba(255,230,225,.2));z-index:1}
+.bigRose.level1{filter:grayscale(.7) sepia(.15) brightness(1.3) drop-shadow(0 0 24px rgba(255,200,200,.22))}
+.bigRose.level2{filter:grayscale(.4) sepia(.28) saturate(1.8) brightness(1.12) drop-shadow(0 0 30px rgba(255,150,160,.28))}
+.bigRose.level3{filter:sepia(.25) saturate(3.5) hue-rotate(315deg) brightness(1) drop-shadow(0 0 38px rgba(255,70,95,.34))}
+.bigRose.level4{filter:sepia(.22) saturate(6) hue-rotate(315deg) brightness(.95) drop-shadow(0 0 50px rgba(255,45,75,.48));transform:scale(1.06)}
+.bigRose.finalGlow{animation:roseGlow 2s ease-in-out infinite}
+@keyframes roseGlow{50%{filter:sepia(.22) saturate(7) hue-rotate(315deg) brightness(1) drop-shadow(0 0 70px rgba(255,55,85,.65))}}
+.petals{position:absolute;inset:5%;z-index:3}
+.petal{position:absolute;width:62px;height:62px;border-radius:50% 50% 50% 8%;border:1px solid rgba(255,215,210,.55);background:radial-gradient(circle at 35% 30%,#fffaf7,#f0d7d0 70%);box-shadow:0 5px 20px rgba(255,180,180,.18);cursor:pointer;transition:transform .35s,opacity .5s,box-shadow .5s;display:grid;place-items:center;color:#6b3037;font-size:18px;-webkit-tap-highlight-color:transparent}
+.petal:hover{transform:scale(1.12) rotate(-8deg)}
+.petal:active{transform:scale(.92)}
+.petal.done{background:radial-gradient(circle at 35% 30%,#ff9eaa,#d92f4a);color:white;border-color:#ffb8c0;box-shadow:0 0 25px rgba(255,55,85,.45),0 0 55px rgba(255,55,85,.12)}
+.petal:nth-child(1){left:10%;top:34%;transform:rotate(-28deg)}
+.petal:nth-child(2){left:24%;top:13%;transform:rotate(-8deg)}
+.petal:nth-child(3){left:45%;top:7%;transform:rotate(12deg)}
+.petal:nth-child(4){right:22%;top:14%;transform:rotate(30deg)}
+.petal:nth-child(5){right:8%;top:35%;transform:rotate(50deg)}
+.petal:nth-child(6){right:20%;bottom:15%;transform:rotate(70deg)}
+.petal:nth-child(7){left:24%;bottom:10%;transform:rotate(-65deg)}
+.petal:nth-child(8){left:7%;bottom:29%;transform:rotate(-48deg)}
+.secretPetal{position:absolute;width:76px;height:76px;left:50%;top:50%;transform:translate(-50%,-50%) scale(.2);border-radius:55% 45% 60% 25%;border:1px solid rgba(255,225,220,.9);background:radial-gradient(circle at 35% 25%,#fff8f4,#ffb4bc 50%,#df3b55 100%);color:white;box-shadow:0 0 25px rgba(255,105,125,.45),0 0 60px rgba(255,80,100,.22);opacity:0;cursor:pointer;z-index:10;transition:transform 1s cubic-bezier(.2,.8,.2,1),opacity 1s ease;display:grid;place-items:center;font-size:24px}
+.secretPetal.visible{opacity:1;transform:translate(-50%,-50%) scale(1);animation:secretPulse 2s ease-in-out infinite}
+@keyframes secretPulse{50%{box-shadow:0 0 35px rgba(255,105,125,.7),0 0 80px rgba(255,80,100,.3)}}
+.message{min-height:82px;width:min(680px,100%);text-align:center;padding:19px 22px;border:1px solid rgba(255,160,160,.3);border-radius:18px;background:rgba(45,15,20,.68);backdrop-filter:blur(8px);font-size:19px;color:#ffeae5;opacity:0;transform:translateY(8px) scale(.98);transition:.4s;display:flex;align-items:center;justify-content:center}
+.message.show{opacity:1;transform:none}
+.progress{font-size:13px;color:#c9aaa5}
+#final{align-items:center;justify-content:center;text-align:center}
+.final{max-width:650px;animation:finalIn 1s ease both}
+@keyframes finalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.finalRose{font-size:min(55vw,330px);filter:sepia(.22) saturate(7) hue-rotate(315deg) drop-shadow(0 0 50px rgba(255,50,80,.5));animation:appear 1.2s ease both}
+@keyframes appear{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.final h2{font-size:clamp(38px,8vw,68px);font-weight:400;margin:0 0 12px}
+.finalMessage{font-size:clamp(20px,4vw,27px);color:#ffb0b5;margin:22px auto}
+.secretText{margin:28px auto 0;padding:20px 22px;border:1px solid rgba(255,170,170,.22);border-radius:18px;background:rgba(45,15,20,.45);color:#e6cfca;font-style:italic;opacity:0;transform:translateY(10px);transition:.8s ease}
+.secretText.show{opacity:1;transform:none}
+.small{font-size:15px;color:#caa9a5}
+.save{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particles i{position:absolute;width:4px;height:4px;border-radius:50%;background:#ffb3ad;opacity:.55;animation:twinkle 3s infinite}
+@keyframes twinkle{50%{opacity:.1;transform:scale(.4)}}
+@media(max-width:700px){.card{min-height:100vh;border-radius:0}.screen{min-height:100vh}.page{padding:0}#intro{flex-direction:column;text-align:center;justify-content:center}.roseHero{min-width:240px;width:80vw}.introText{order:2}.roseHero{order:1}.petal{width:52px;height:52px}.secretPetal{width:66px;height:66px}.message{font-size:16px}.bigRose{font-size:230px}.final{padding-bottom:15px}}
+</style>
+</head>
+<body>
+<div class="page"><main class="card">
+<div class="particles" id="particles"></div>
+
+<section class="screen active" id="intro">
+  <div class="introText">
+    <div class="eyebrow">Pour Simona ❤️</div>
+    <h1>J’ai quelque chose<br>pour toi…</h1>
+    <p>Prends simplement un petit moment rien que pour toi.<br>Une rose t’attend, mais elle cache quelques petits secrets.</p>
+    <button class="cta" onclick="start()">Découvrir&nbsp; 🌹</button>
+    <div class="hint">Chaque pétale cache un message qui n’attend que toi…</div>
+  </div>
+  <div class="roseHero"><div class="rose">🌹</div></div>
+</section>
+
+<section class="screen" id="roseScreen">
+  <div class="top">
+    <h2>Une rose, rien que pour toi 🌹</h2>
+    <p>Prends ton temps… chaque pétale cache quelque chose.</p>
+  </div>
+  <div class="game">
+    <div class="roseStage">
+      <div class="bigRose" id="bigRose">🌹</div>
+      <div class="petals" id="petals"></div>
+      <button class="secretPetal" id="secretPetal" aria-label="Découvrir la dernière pétale">♥</button>
+    </div>
+    <div class="message" id="message">Choisis un pétale… ❤️</div>
+    <div class="progress" id="progress">0 / 8 pétales découvertes</div>
+  </div>
+</section>
+
+<section class="screen" id="final">
+  <div class="final">
+    <div class="finalRose">🌹</div>
+    <h2>Tu as tout découvert…</h2>
+    <p>Mais il restait encore une dernière pétale.</p>
+    <p class="finalMessage">Voici quelques-unes des raisons pour lesquelles je suis tombé amoureux de toi, Simona. ❤️</p>
+    <p class="small">Et ce ne sont que quelques-unes…</p>
+    <div class="secretText" id="secretText">
+      Parce qu’au fond, il y a tellement de petites choses chez toi qui ont réussi à faire tomber mon cœur.
+      <br><br>
+      Et je crois que je pourrais continuer à en trouver encore longtemps. ❤️
+    </div>
+    <div class="save">
+      <button class="cta" onclick="showSecret()">Lire la suite ❤️</button>
+      <button class="cta" onclick="makeWallpaper()">Garder ma rose 🌹</button>
+      <button class="cta" onclick="restart()">Recommencer</button>
+    </div>
+    <p class="small" id="saveInfo"></p>
+  </div>
+</section>
+</main></div>
+
+<script>
+const messages=[
+"Tu es magnifique. ❤️",
+"Ton sourire est absolument incroyable et envoûtant.",
+"Tu es incroyablement attentionnée et bienveillante.",
+"Ton petit côté réservé me fait craquer.",
+"Tu es belle, même quand tu ne t’en rends pas compte.",
+"Et oui… je trouve ton corps absolument sublime. 😏❤️",
+"Tu es parfaite à mes yeux.",
+"Mais surtout… tu es la personne que mon cœur a choisie. ❤️"
+];
+let found=0;
+
+function start(){
+  document.getElementById("intro").classList.remove("active");
+  document.getElementById("roseScreen").classList.add("active");
+  found=0;
+  buildPetals();
+}
+function buildPetals(){
+  const box=document.getElementById("petals");
+  box.innerHTML="";
+  messages.forEach((_,i)=>{
+    const b=document.createElement("button");
+    b.className="petal";
+    b.innerHTML="♡";
+    b.setAttribute("aria-label","Découvrir le message "+(i+1));
+    b.onclick=()=>reveal(i,b);
+    box.appendChild(b);
+  });
+}
+function reveal(i,b){
+  if(b.classList.contains("done")) return;
+  b.classList.add("done");
+  b.innerHTML="♥";
+  found++;
+  const message=document.getElementById("message");
+  message.classList.remove("show");
+  void message.offsetWidth;
+  message.textContent=messages[i];
+  message.classList.add("show");
+
+  const rose=document.getElementById("bigRose");
+  rose.classList.remove("level1","level2","level3","level4");
+  if(found<=2) rose.classList.add("level1");
+  else if(found<=4) rose.classList.add("level2");
+  else if(found<=6) rose.classList.add("level3");
+  else rose.classList.add("level4");
+
+  document.getElementById("progress").textContent=found+" / 8 pétales découvertes";
+  if(found===8) setTimeout(revealSecretPetal,1300);
+}
+function revealSecretPetal(){
+  document.getElementById("bigRose").classList.add("finalGlow");
+  const secret=document.getElementById("secretPetal");
+  secret.classList.add("visible");
+  document.getElementById("message").textContent="Une dernière pétale est apparue… ❤️";
+  document.getElementById("progress").textContent="Une dernière chose…";
+  secret.onclick=()=>{
+    secret.classList.remove("visible");
+    setTimeout(showFinal,500);
+  };
+}
+function showFinal(){
+  document.getElementById("roseScreen").classList.remove("active");
+  document.getElementById("final").classList.add("active");
+  burst();
+}
+function showSecret(){
+  document.getElementById("secretText").classList.add("show");
+}
+function restart(){
+  found=0;
+  document.getElementById("final").classList.remove("active");
+  document.getElementById("roseScreen").classList.add("active");
+  const rose=document.getElementById("bigRose");
+  rose.classList.remove("level1","level2","level3","level4","finalGlow");
+  document.getElementById("message").classList.remove("show");
+  document.getElementById("message").textContent="Choisis un pétale… ❤️";
+  document.getElementById("progress").textContent="0 / 8 pétales découvertes";
+  document.getElementById("secretPetal").classList.remove("visible");
+  document.getElementById("secretText").classList.remove("show");
+  buildPetals();
+}
+function burst(){
+  for(let i=0;i<45;i++){
+    const s=document.createElement("i");
+    s.style.left=(20+Math.random()*60)+"%";
+    s.style.top=(20+Math.random()*60)+"%";
+    s.style.animationDelay=(Math.random()*2)+"s";
+    s.style.transform="scale("+(1+Math.random()*2)+")";
+    document.getElementById("particles").appendChild(s);
+    setTimeout(()=>s.remove(),5000);
+  }
+}
+function makeWallpaper(){
+  const c=document.createElement("canvas");
+  c.width=1080;c.height=1920;
+  const x=c.getContext("2d");
+  const g=x.createRadialGradient(540,700,80,540,900,1000);
+  g.addColorStop(0,"#4b151d");g.addColorStop(1,"#080405");
+  x.fillStyle=g;x.fillRect(0,0,c.width,c.height);
+  x.textAlign="center";
+  x.fillStyle="#ffe9df";x.font="48px Georgia";x.fillText("Une rose pour toi",540,180);
+  x.font="330px serif";x.fillText("🌹",540,900);
+  x.font="42px Georgia";x.fillStyle="#ffb0b5";x.fillText("Cette rose est maintenant à toi. ❤️",540,1350);
+  x.font="30px Georgia";x.fillStyle="#e6cfca";x.fillText("Fait avec tout mon cœur, juste pour toi.",540,1430);
+  const a=document.createElement("a");
+  a.download="rose-pour-simona.png";
+  a.href=c.toDataURL("image/png");
+  a.click();
+  document.getElementById("saveInfo").textContent="La rose est prête à être enregistrée sur ton téléphone. ❤️";
+}
+for(let i=0;i<22;i++){
+  const s=document.createElement("i");
+  s.style.left=Math.random()*100+"%";
+  s.style.top=Math.random()*100+"%";
+  s.style.animationDelay=Math.random()*3+"s";
+  document.getElementById("particles").appendChild(s);
+}
+</script>
+</body>
+</html>
